@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Joe's Hotdog Stand</title>
+</head>
+
+<body>
+
+    <h1>Joe's Hotdog Stand Order</h1>
+
+    <script>
+        // menu alert
+        alert(
+            "Welcome to Joe's Hotdog Stand!\n\n" +
+            "Menu:\n" +
+            "Hotdog: $5.25\n" +
+            "French Fries: $3.75\n" +
+            "Drink: $2.50\n\n" +
+            "Specials:\n" +
+            "Joe's Meal Deal: $10 (Hotdog + Fries + Drink)\n" +
+            "10% discount on orders $30 or more"
+        );
+
+
+        //Associative array for names and prices
+        prices = {
+            "hotdogs": 5.25,
+            "french_fries": 3.75,
+            "drinks": 2.50
+        };
+        // empty quantities associative arrays
+        quantities = {};
+        //populate array
+        for (item in prices) {
+            q = parseInt(prompt("How many " + item + " do you want?"));
+            quantities[item] = q;
+        }
+
+
+
+        //show money function (takes float and returns string money amount to 2 decimal places)
+
+        function showMoney(amount) {
+            //rounds to nearest int
+            amountx100 = Math.round(amount * 100)
+            //turn to string and insert decimal
+            str = amountx100.toString();
+
+            //properly insert decimal
+            if (str.length == 1) {
+                //less than 10 cents
+                return "0.0" + str
+            }
+            else if (str.length == 2) {
+                //less than 1 dollar
+                return "0." + str
+            } else {
+                //adds decimal in corret location
+                return str.slice(0, -2) + "." + str.slice(-2);
+
+            }
+
+        }
+        // console.log(quantities);
+        // document.write("test");
+
+        //calculate total
+        total = 0;
+        discount = 0;
+        //first check meal deal
+        meal_deal_count = Math.min(quantities["hotdogs"], quantities["french_fries"], quantities["drinks"]);
+        //adjust total
+        total += 10 * meal_deal_count;
+        //subtract all meal deal items
+        meal_adj_hotdog_count = quantities["hotdogs"] - meal_deal_count;
+        meal_adj_fries_count = quantities["french_fries"] - meal_deal_count;
+        meal_adj_bev_count = quantities["drinks"] - meal_deal_count;
+
+        // //now manually add remaining
+        total += meal_adj_hotdog_count * prices["hotdogs"] + meal_adj_fries_count * prices["french_fries"] + meal_adj_bev_count * prices["drinks"];
+        pre_discount_total = total;
+
+        //joes offer
+        if (total >= 30) {
+            discount = total * 0.1;
+        }
+        //no need for else (discount automatically 0)
+        //update subtotal
+        total -= discount;
+        discounted_total = total;
+
+        //sales tax
+        tax = total * 0.0625;
+        total += tax;
+
+        //display
+        document.write("Number of hotdogs: " + quantities["hotdogs"] + ", Cost: $" + showMoney(quantities["hotdogs"] * prices["hotdogs"]) + "<br>" +
+            "Number of french fries: " + quantities["french_fries"] + ", Cost: $" + showMoney(quantities["french_fries"] * prices["french_fries"]) + "<br>" +
+            "Number of drinks: " + quantities["drinks"] + ", Cost: $" + showMoney(quantities["drinks"] * prices["drinks"]) + "<br>" + "<br>" +
+            "Subtotal (adjusted for meals): $" + showMoney(pre_discount_total) + "<br>"
+        );
+        //if applicable show discount and subtotal after it
+        if (discount != 0) {
+            document.write("<br>" + "Discounts: $" + showMoney(discount) + "<br>" +
+                "Subtotal after discount: $" + showMoney(discounted_total) + "<br>"
+            );
+        }
+        //tax and final
+        document.write("Tax: $" + showMoney(tax) + "<br>" + "<br>" +
+            "Final Total: $" + showMoney(total)
+        );
+
+
+
+
+
+
+
+    </script>
+
+</body>
+
+</html>
